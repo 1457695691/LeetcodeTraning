@@ -49,7 +49,7 @@ import java.util.*;
 
 /**
  * @author Ayuan
- * 题目：两数之和
+ * 题目：两数之和 剑指 Offer II 006. 排序数组中两个数字之和
  * 做题时间：2022-04-22 06:26:05
  */
 public class TwoSum {
@@ -75,7 +75,6 @@ public class TwoSum {
             }
             throw new IllegalArgumentException("No two sum solution");
         }
-
     }
 //leetcode submit region end(Prohibit modification and deletion)
 
