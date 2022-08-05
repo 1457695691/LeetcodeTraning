@@ -1,8 +1,5 @@
 package leetcode.editor.cn;
 
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Ayuan
@@ -34,13 +31,5 @@ public class PivotIndex {
             }
             return -1;
         }
-    }
-
-    @Test
-    public void testOffer012() {
-        PivotIndex.Solution solution = new PivotIndex().new Solution();
-        assertEquals(3, solution.pivotIndex(new int[]{1, 7, 3, 6, 5, 6}));
-        assertEquals(-1, solution.pivotIndex(new int[]{1, 2, 3}));
-        assertEquals(0, solution.pivotIndex(new int[]{2, 1, -1}));
     }
 }
