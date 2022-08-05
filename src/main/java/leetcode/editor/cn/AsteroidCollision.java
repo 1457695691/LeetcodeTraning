@@ -5,7 +5,8 @@ import java.util.Deque;
 
 /**
  * @author Ayuan
- * @Description: 735. 行星碰撞
+ * @Description: 剑指 Offer II 037. 小行星碰撞
+ * 735. 行星碰撞
  * @date 2022/7/14 17:46
  */
 public class AsteroidCollision {
