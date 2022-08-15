@@ -1,0 +1,132 @@
+//package utils;
+//
+//import java.io.Serializable;
+//import java.math.BigDecimal;
+//import java.time.LocalDate;
+//import java.time.LocalDateTime;
+//import java.util.ArrayList;
+//import java.util.List;
+//
+//import lombok.extern.log4j.Log4j;
+//import lombok.extern.slf4j.Slf4j;
+//import org.springframework.data.domain.Page;
+//import org.springframework.data.domain.PageImpl;
+//import org.springframework.data.domain.PageRequest;
+//import org.springframework.data.domain.Pageable;
+//import org.springframework.data.domain.Sort;
+//import lombok.Data;
+//import work.java8.Product;
+//
+///**
+// * 自定义分页
+// * @author Administrator
+// *
+// */
+//@Slf4j
+//public class PageUtil {
+//
+//	//自定义分页核心代码
+//	public static Page<Order> pageList(List<Order> testlist, int page, int pageSize,String sortColumn){
+//		Page<Order> pageOrder = null;
+//		Sort sort = Sort.by(Sort.Direction.DESC, sortColumn);//"createdDate"
+//		Pageable pageable = PageRequest.of(page-1, pageSize, sort);
+//		// 当前页第一条数据在List中的位置
+//		int start = (int)pageable.getOffset();
+//		// 当前页最后一条数据在List中的位置
+//		int end = (start + pageable.getPageSize()) > testlist.size() ? testlist.size() : ( start + pageable.getPageSize());
+//		pageOrder = new PageImpl<Order>(testlist.subList(start, end), pageable, testlist.size());
+//		return pageOrder;
+//	}
+//
+//	public static void main(String[] args) {
+//		//测试list
+//		List<Order> testlist = new ArrayList<Order>();
+//		Order order = new Order();
+//		//第一条测试数据
+//		order.setProductId("207ea2dc-deaa-4139-a08b-1b879bd22573");
+//		order.setProductName("订单测试商品名称1");
+//		order.setUserId("8f4dee00-5d7c-4d7e-aaed-f2b7392deed4");
+//		order.setPrice(new BigDecimal(91.00));
+//		order.setCreatedDate(LocalDateTime.now());
+//		testlist.add(order);
+//		//第二条测试数据
+//        order = new Order();
+//		order.setProductId("207ea2dc-deaa-4139-a08b-1b879bd22572");
+//		order.setProductName("订单测试商品名称2");
+//		order.setUserId("8f4dee00-5d7c-4d7e-aaed-f2b7392deed2");
+//		order.setPrice(new BigDecimal(92.00));
+//		order.setCreatedDate(LocalDateTime.now());
+//		testlist.add(order);
+//		System.out.println("list.size():"+testlist.size());
+//		for (int i = 0; i < testlist.size(); i++) {
+//			Order orderResult = new Order();
+//			orderResult = testlist.get(i);
+//			System.out.println("orderResult:"+orderResult);
+//		}
+//		//测试第一页,10条
+//		int page = 1;
+//		int pageSize = 10;
+//		String sortColumn = "createdDate";
+//
+//		pageList(testlist,page,pageSize,sortColumn);
+//	}
+//}
+//
+//@Data
+//public class Order implements Serializable {
+//	private String productId;
+//	private String productName;
+//	private String userId;
+//	private BigDecimal price;
+//	private LocalDateTime createdDate;
+//}
+//
+////审核-分页列表查询
+//public Page<Product> findAuditProductPageList(Product product, Pageable pageable) {
+//
+//	log.info("审核-分页列表查询--入参product:{},pageable:{}",product,pageable);
+//	Page<Product> pageProduct = null;
+//	String userId = "";
+//	if (null != product.getIssuer() && product.getIssuer().trim().length()>0) {
+//		//调账户项目--根据username获取用户ID
+//		userId = GetUserInfoDetails("", product.getIssuer(),"").getId();
+//		log.info("调账户项目--根据username获取用户ID:{}",userId);
+//		if (null == userId) {
+//			log.info("根据输入的username获取不到userId");
+//			throw new NotFoundException("查询不到用户ID");
+//		}
+//	}
+//
+//	Page<Product> getProductPageList = null;
+//	if (null != userId && userId.trim().length()>0) {
+//		getProductPageList = productRepository.findByAuditStatusAndProductTypeAndProductNameContainsAndUserId(product.getAuditStatus(), product.getProductType(), product.getProductName(), userId, pageable);
+//
+//	} else {
+//		getProductPageList = productRepository.findByAuditStatusAndProductTypeAndProductNameContains(product.getAuditStatus(), product.getProductType(), product.getProductName(), pageable);
+//	}
+//	int total = (int)getProductPageList.getTotalElements();
+//	log.info("从数据库查出来getProductPageList总条数:{}",total);
+//	log.info("从数据库查出来getProductPageList当前页条数:{}",getProductPageList.getSize());
+//
+//	List<Product> productList = new ArrayList<Product>();
+//	if (null != getProductPageList && getProductPageList.getSize()>0) {
+//		List<Product> getProductList = getProductPageList.getContent();
+//		if (null != getProductList && getProductList.size()>0) {
+//			for (int i = 0; i < getProductList.size(); i++) {
+//				Product getProduct = getProductList.get(i);
+//				if (null != getProduct.getUserId()) {
+//					String userName = GetUserInfoDetails(getProduct.getUserId(), "", "").getUsername();
+//					getProduct.setIssuer(null==userName?"":userName);
+//					productList.add(getProduct);
+//				}
+//			}
+//		}
+//	}
+//	log.info("productList当前页条数:{}",productList.size());
+//	// 配置分页数据
+//	int pageSize = productList.size() > 1 ? productList.size() : 10;
+//	Pageable pageAble = PageRequest.of(0, pageSize);
+//	pageProduct = new PageImpl<Product>(productList, pageAble, total);
+//
+//	return pageProduct;
+//}

@@ -1,0 +1,291 @@
+//package utils;//基于SpringBoot的发送邮件(简单邮件、带附件的、带静态图片的三种)
+//
+//import lombok.extern.slf4j.Slf4j;
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.beans.factory.annotation.Value;
+//import org.springframework.core.io.FileSystemResource;
+//import org.springframework.mail.SimpleMailMessage;
+//import org.springframework.mail.javamail.JavaMailSender;
+//import org.springframework.mail.javamail.MimeMessageHelper;
+//import org.springframework.scheduling.annotation.Async;
+//import org.springframework.stereotype.Component;
+//
+//import javax.mail.MessagingException;
+//import javax.mail.internet.MimeMessage;
+//import java.io.File;
+////import javax.mail.internet.MimeMessage;
+////1 .引入依赖包
+////<!--发送邮件-->
+////<dependency>
+////   <groupId>org.springframework.boot</groupId>
+////   <artifactId>spring-boot-starter-mail</artifactId>
+////</dependency>
+////<dependency>
+////   <groupId>org.springframework.boot</groupId>
+////   <artifactId>spring-boot-starter-thymeleaf</artifactId>
+////</dependency>
+////
+////2.配置文件如下：
+////spring.mail.host=smtp.qq.com
+////spring.mail.username=1977624135@qq.com
+////spring.mail.password=ibcsxuinseuichcb//并非密码,而是第三方登陆邮件所需要的授权码.
+////spring.mail.default-encoding=UTF-8
+////spring.application.name=spirng-boot-mail
+////
+////3.工具类如下：
+////package utils;
+////
+//
+//@Slf4j
+//@Component
+//public class EmailUtil {
+//
+//	@Autowired
+//	private JavaMailSender javaMailSender;
+//
+//	@Value("${spring.mail.username}")
+//    private String from;
+//
+//	//1简单邮件
+//	public void sendSimpleMail(String to, String text, String subject){
+//		log.info("EmailUtil--sendSimpleMail入参from:{},to:{},text:{},subject:{}",from, to, text, subject);
+//		SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+//		simpleMailMessage.setFrom(from);
+//		simpleMailMessage.setTo(to);
+//		simpleMailMessage.setText(text);
+//		simpleMailMessage.setSubject(subject);
+//
+//		try {
+//			javaMailSender.send(simpleMailMessage);
+//			log.info("EmailUtil--sendSimpleMail--简单邮件已发送！！！");
+//		} catch (Exception e) {
+//			log.warn("EmailUtil--sendSimpleMail--简单邮件发送异常:{}",e.getMessage());
+//			throw new BusinessException("EmailUtil--sendSimpleMail--简单邮件发送异常",e);
+//		}
+//	}
+//
+//	//2带附件邮件
+//	public void sendAttachmentsMail(String to, String subject, String content, String filePath) {
+//		log.info("EmailUtil--sendAttachmentsMail入参from:{},to:{},subject:{},content:{},filePath:{}",from, to, subject, content, filePath);
+//		MimeMessage message = javaMailSender.createMimeMessage();
+//		try {
+//			MimeMessageHelper helper = new MimeMessageHelper(message, true);//true表示需要创建一个multipart message
+//			helper.setFrom(from);
+//			helper.setTo(to);
+//			helper.setSubject(subject);
+//			helper.setText(content);
+//			helper.setCc("1977624135@qq.com");//抄送
+//			//添加附件
+//			FileSystemResource file = new FileSystemResource(new File(filePath));
+//			String fileName = file.getFilename();
+//			helper.addAttachment(fileName, file);
+//			javaMailSender.send(message);
+//			log.info("EmailUtil--sendAttachmentsMail--带附件邮件已经发送！！！");
+//		} catch (Exception e) {
+//			log.info("EmailUtil--sendAttachmentsMail--带附件邮件已经发送--异常:{}",e.getMessage());
+//			throw new BusinessException("EmailUtil--sendAttachmentsMail--带附件邮件已经发送--异常",e);
+//		}
+//	}
+//
+//	//3带静态资源文件（图片）的邮件
+//	public void sendInlineResourceMail(String to, String subject, String content, String rscPath, String rscId) {
+//		log.info("EmailUtil--sendInlineResourceMail入参from:{},to:{},subject:{},content:{},rscPath:{},rscId:{}",from, to, subject, content, rscPath, rscId);
+//		MimeMessage message = javaMailSender.createMimeMessage();
+//		try {
+//			MimeMessageHelper helper = new MimeMessageHelper(message, true);//true表示需要创建一个multipart message
+//			helper.setFrom(from);
+//			helper.setTo(to);
+//			helper.setSubject(subject);
+//			helper.setText(content);
+//			helper.setCc("1977624135@qq.com");//抄送
+//			//添加附件
+//			FileSystemResource file = new FileSystemResource(new File(rscPath));
+//			helper.addInline(rscId, file);
+//			javaMailSender.send(message);
+//			log.info("EmailUtil--sendInlineResourceMail--带静态资源文件邮件已经发送！！！");
+//		} catch (Exception e) {
+//			log.info("EmailUtil--sendInlineResourceMail--带静态资源文件邮件已经发送--异常:{}",e.getMessage());
+//			throw new BusinessException("EmailUtil--sendInlineResourceMail--带静态资源文件邮件已经发送--异常",e);
+//		}
+//	}
+//	//4.html格式的邮件，含跳转链接
+//	@Async
+//    	public void sendActiveMail(String mailAddress, String userId, String activeCode){
+//		String completeUrl =  this.activeUrl + "?id=" + userId + "&code=" + activeCode;
+//		MimeMessage message = mailSender.createMimeMessage();
+//		try {
+//			MimeMessageHelper helper = null;
+//			try {
+//				helper = new MimeMessageHelper(message,true);
+//			} catch (MessagingException e) {
+//				e.printStackTrace();
+//			}
+//
+//			helper.setTo(mailAddress);
+//		    helper.setFrom("servicechain@sina.com");
+//		    helper.setSubject("请激活您的天天服务链账号");
+//		    String mailContent = "<h1>天天服务链</h1>" +
+//			    "<p>你好，</p>" +
+//			    "<p>感谢您注册天天服务链，请点击以下链接激活账号:</p>" +
+//			    "<p>" + "<a href='" + completeUrl + "'>" + completeUrl  + "</a></p>" +
+//			    "<p>如果以上链接无法点击，请将上面的地址复制到你的浏览器地址栏。</p>" +
+//			    "<p><strong>天天服务链运营团队</strong></p>";
+//		    helper.setText(mailContent, true);
+//		    mailSender.send(message);
+//		    log.info("发送激活邮件-{}", userId);
+//		} catch (MessagingException e) {
+//		    log.warn("发送激活邮件失败-{}", userId);
+//		    throw new RuntimeException(e.getMessage());
+//		}
+//    }
+//
+//    //5自定义格式的邮件
+//	@Async
+//	public void sendHtmlMail(String mailAddress, String displayName, Product product) {
+//		try {
+//			if (null == mailAddress) {
+//				throw new BusinessException("接收者的邮箱为空");
+//			}
+//			if (null != displayName && displayName.trim().length()>0) {
+//				displayName = displayName + "，您好！";
+//			} else {
+//				displayName = "";
+//			}
+//			String productType = product.getProductType().toString();
+//			String productTypeStr = "";
+//			String productName = product.getProductName();
+//			String auditStatus = product.getAuditStatus().toString();
+//			String auditStatusStr = "";
+//			if ("CODE".equals(productType)) {
+//			     productTypeStr = "代码";
+//			} else if ("COMPONENT".equals(productType)) {
+//				 productTypeStr = "组件";
+//			} else if ("RESUME".equals(productType)) {
+//				 productTypeStr = "简历";
+//			} else {
+//				 throw new BusinessException("商品类型有误");
+//			}
+//			if ("SUCCESS".equals(auditStatus)) {
+//				auditStatusStr = "审核通过!";
+//			} else if ("FAIL".equals(auditStatus)) {
+//				String auditReason = product.getProductDetail().getAuditReason();
+//				if (null != auditReason && auditReason.trim().length()>0) {
+//					auditStatusStr = "审核未通过"+":"+auditReason+"。";
+//				} else {
+//					auditStatusStr = "审核未通过。";
+//				}
+//			} else {
+//				 throw new BusinessException("审核结果有误");
+//			}
+//
+//			MimeMessage message = javaMailSender.createMimeMessage();
+//    		MimeMessageHelper helper = new MimeMessageHelper(message,true);
+//		    helper.setTo(mailAddress);
+//		    helper.setFrom(from,"天天服务链");
+//		    helper.setSubject("请查看您的审核结果");
+//		    String mailContent =
+//                    "<table style=\"font-family: microsoft yahei;background: #f6f6f6;width: 100%;line-height: initial;margin: 0 auto;padding: 10px 0;white-space: normal;word-break: break-all;word-wrap: break-word;\">\n" +
+//                    "<tbody>\n" +
+//                            "            <tr>\n" +
+//                            "                <td>\n" +
+//                            "                    <table style=\"max-width: 620px;display: block;margin: 0 auto;padding: 0 2.5%;\">\n" +
+//                            "                        <tbody style=\"display: block;\">\n" +
+//                            "                            <!-- 邮件内容 -->\n" +
+//                            "                            <!-- padding: 30px 55px; -->\n" +
+//                            "                            <tr class=\"email_body\" style=\"display: block;background: #fff;padding: 5% 8.87%;min-height: 350px;box-shadow: 4px 4px 1px #E2E2E2;\">\n" +
+//                            "                                <td style=\"display: block;\">\n" +
+//                            "                                    <table style=\"display: block;\">\n" +
+//                            "                                        <tbody style=\"display: block;\">\n" +
+//                            "                                            <tr>\n" +
+//                            "                                                <td style=\"font-family: microsoft yahei;display: block;font-size: 22px;color: #0072BC;margin-bottom: 32px;\">审核结果通知</td>\n" +
+//                            "                                            </tr>\n" +
+//                            "                                            <tr>\n" +
+//                            "                                                <td style=\"font-family: microsoft yahei;display: block;font-size: 16px;color: #000000;margin-bottom: 10px;\">"+displayName+"</td>\n" +
+//                            "                                            </tr>\n" +
+//                            "                                            <tr>\n" +
+//                            "                                                <td style=\"font-family: microsoft yahei;display: block;font-size: 14px;color: #666666;margin-bottom: 10px;\"><p style='font-size:18px;'>您在天天服务链发布的共享"+ productTypeStr + "："+ productName +"<font style='font-size:16px;color:#55aeff;font-style:italic;'>"+auditStatusStr+"</font></p></td>\n" +
+//                            "                                            </tr>\n" +
+//                            "                                                <td style=\"font-family: microsoft yahei;display: block;font-size: 14px;color: #666666;margin-bottom: 10px;height:200px\"></td>\n" +
+//                            "                                            </tr>"+commonStyle();
+//		    helper.setText(mailContent, true);
+//		    javaMailSender.send(message);
+//		    log.info("审核结果--发送邮件通知--成功");
+//		} catch (Exception e) {
+//		    log.warn("审核结果--发送邮件通知--失败");
+//		    throw new RuntimeException(e.getMessage());
+//		}
+//    }
+//
+//    //通用样式
+//    public String commonStyle(){
+//        return "                                            <tr style=\"display: block;\">\n" +
+//                "                                                <td style=\"font-family: microsoft yahei;display: block;text-align: right;font-size: 14px;\">天天服务链团队</td>\n" +
+//                "                                            </tr>\n" +
+//                "                                            <tr style=\"display: block;\">\n" +
+//                "                                                <td style=\"font-family: microsoft yahei;display: block;text-align: right;font-size: 12px;line-height: 20px;margin-top: 5px;color: #ccc;\">"+ LocalDate.now() +"</td>\n" +
+//                "                                            </tr>\n" +
+//                "                                        </tbody>\n" +
+//                "                                    </table>\n" +
+//                "                                </td>\n" +
+//                "                            </tr>\n" +
+//                "                            <!-- 底部联系方式 -->\n" +
+//                "                            <tr style=\"display: block;\">\n" +
+//                "                                <td style=\"display: block;\">\n" +
+//                "                                    <table style=\"color: #999999;display: block;margin-top: 14px;text-align: center;\">\n" +
+//                "                                        <tbody style=\"display: block;\">\n" +
+//                "                                            <tr style=\"display: block;\">\n" +
+//                "                                                <td style=\"font-family: microsoft yahei;display: block;font-size: 12px;\">如遇到问题，请及时联系我们。</td>\n" +
+//                "                                            </tr>\n" +
+//                "                                            <tr style=\"display: block;\">\n" +
+//                "                                                <td style=\"font-family: microsoft yahei;display: block;font-size: 12px;\">联系电话：021-51105660-6001</td>\n" +
+//                "                                            </tr>\n" +
+//                "                                            <tr style=\"display: block;\">\n" +
+//                "                                                <td style=\"font-family: microsoft yahei;display: block;font-size: 12px;\">联系邮箱：servicechain@newtouch.com</td>\n" +
+//                "                                            </tr>\n" +
+//                "                                        </tbody>\n" +
+//                "                                    </table>\n" +
+//                "                                </td>\n" +
+//                "                            </tr>\n" +
+//                "                        </tbody>\n" +
+//                "                    </table>\n" +
+//                "                </td>\n" +
+//                "            </tr>\n" +
+//                "        </tbody>\n" +
+//                "    </table>";
+//    }
+//
+//}
+////
+////4.单元测试如下：
+////@Test
+////	public void sendSimpleMail() {
+////		String to = "1977624135@qq.com";//发送QQ邮件---SMTP 协议：发送邮件协议；
+////		String text = "共享邮件Test内容";
+////		String subject = "共享邮件Test主题";
+////		emailUtil.sendSimpleMail(to, text, subject);
+////	}
+////
+////	@Test
+////	public void sendAttachmentsMail() {
+////		String to = "1977624135@qq.com";
+////		String subject = "共享邮件--含附件--Test主题";
+////		String content = "共享邮件--含附件--Test内容";
+////		String fileDir ="E:\\file";
+////		String fileName ="表.txt";
+////		String filePath = fileDir + "\\" + fileName;
+////		emailUtil.sendAttachmentsMail(to, subject, content, filePath);
+////	}
+////
+////	@Test
+////	public void sendInlineResourceMail() {
+//////		String rscId = UUID.randomUUID().toString().replace("-", "");
+////		String rscId = "";
+////		String to = "1977624135@qq.com";
+////		String subject = "共享邮件--含静态文件图片--Test主题";
+////		String content = "<html><body>这是有图片的邮件:<img src=\'cid:"+rscId+"\'></body></html>";
+////		String fileDir ="E:\\file";
+////		String imageName ="新致.jpg";
+////		String rscPath = fileDir + "\\" + imageName;
+////		emailUtil.sendInlineResourceMail(to, subject, content, rscPath, rscId);
+////	}
+////
