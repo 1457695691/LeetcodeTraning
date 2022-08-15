@@ -22,10 +22,10 @@ public class NumSubarrayProductLessThanK {
             for (int i = 0; i < nums.length; i++) {
                 int right = i;
                 int sum = nums[i];
-                while (sum < k){
+                while (sum < k) {
                     ret++;
                     right++;
-                    if (right >= nums.length){
+                    if (right >= nums.length) {
                         break;
                     }
                     sum *= nums[right];

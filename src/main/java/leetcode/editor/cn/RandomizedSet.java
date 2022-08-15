@@ -1,6 +1,8 @@
 package leetcode.editor.cn;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * @author Ayuan
@@ -11,6 +13,7 @@ public class RandomizedSet {
     HashMap<Integer, Integer> map;
     List<Integer> list;
     int idx = -1;
+
     /**
      * Initialize your data structure here.
      */

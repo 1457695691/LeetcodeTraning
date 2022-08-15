@@ -7,7 +7,7 @@ package leetcode.editor.cn;
  */
 public class MyCircularQueue {
 
-    private int[] queue;
+    private final int[] queue;
     /**
      * 队首下标
      */
@@ -19,7 +19,7 @@ public class MyCircularQueue {
     /**
      * 数组总空间大小
      */
-    private int size;
+    private final int size;
 
     public MyCircularQueue(int k) {
         size = k;

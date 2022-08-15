@@ -10,7 +10,7 @@ public class NumMatrix {
     /**
      * 二维数组前缀和
      */
-    private int[][] preSum;
+    private final int[][] preSum;
 
     public NumMatrix(int[][] matrix) {
         preSum = new int[matrix.length + 1][matrix[0].length + 1];

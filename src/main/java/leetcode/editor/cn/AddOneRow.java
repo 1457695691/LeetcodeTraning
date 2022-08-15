@@ -18,6 +18,7 @@ public class AddOneRow {
             addLayer(0, depth, val, ans);
             return ans.left;
         }
+
         //d表示当前层
         //depth - 1是原树的叶子层, 那么其原左子树和原右子树就都是空树, 新添加两个值为val的节点作为新的叶子即可
         private void addLayer(int d, int depth, int val, TreeNode root) {
