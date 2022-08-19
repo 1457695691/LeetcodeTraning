@@ -2,7 +2,8 @@ package leetcode.editor.cn;
 
 /**
  * @author Ayuan
- * @Description: 814. 二叉树剪枝
+ * @Description: 剑指 Offer II 047. 二叉树剪枝
+ * 814. 二叉树剪枝
  * @date 2022/7/21 14:02
  */
 public class PruneTree {
