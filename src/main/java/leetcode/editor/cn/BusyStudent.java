@@ -2,7 +2,7 @@ package leetcode.editor.cn;
 
 /**
  * @author Ayuan
- * @Description: TODO
+ * @Description: 1450. 在既定时间做作业的学生人数
  * @date 2022/8/19 10:41
  */
 public class BusyStudent {
