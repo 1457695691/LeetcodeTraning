@@ -26,12 +26,12 @@ public class ArrayRankTransform {
             int n = arr.length;
             int index = 0;
             for (int i : clone) {
-                if (!map.containsKey(i)){
-                    map.put(i,++index);
+                if (!map.containsKey(i)) {
+                    map.put(i, ++index);
                 }
             }
             int[] ans = new int[n];
-            for(int i =0;i< n;i++){
+            for (int i = 0; i < n; i++) {
                 ans[i] = map.get(arr[i]);
             }
             return ans;

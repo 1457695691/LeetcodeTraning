@@ -12,9 +12,9 @@ import java.util.Random;
 public class Skiplist {
 
     class Node {
-        private int val;
+        private final int val;
         private Node next;
-        private Node down;
+        private final Node down;
 
         public Node(int val, Node next, Node down) {
             this.val = val;
@@ -24,7 +24,7 @@ public class Skiplist {
     }
 
     private Node head;
-    private Random random;
+    private final Random random;
 
     public Skiplist() {
         this.head = new Node(-1, null, null);

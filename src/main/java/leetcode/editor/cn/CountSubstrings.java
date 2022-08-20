@@ -26,6 +26,7 @@ public class CountSubstrings {
             }
             return count;
         }
+
         //从字符串的l位置向左，r位置向右，比较是否为回文并计数
         private int search(String s, int l, int r) {
             int count = 0;
