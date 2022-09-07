@@ -37,8 +37,6 @@ public class UniqueLetterString {
                 // 更新a，b的值
                 index[idx][0] = index[idx][1];
                 index[idx][1] = i;
-
-
             }
             return res;
         }
