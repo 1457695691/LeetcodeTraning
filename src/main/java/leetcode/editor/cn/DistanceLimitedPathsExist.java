@@ -24,8 +24,7 @@ public class DistanceLimitedPathsExist {
             //3.建立并差集
             UnionFind uf = new UnionFind(n);
             //4.遍历index数组
-            int k = 0;
-            for (int i : index) {
+            for (int i = 0, k = 0; i < index.length; i++) {
                 //取出a，b两个点和limit
                 int a = queries[i][0], b = queries[i][1], limit = queries[i][2];
                 //遍历 edgeList 中的所有边，依次将长度小于 limit 的边加入到并查集中
