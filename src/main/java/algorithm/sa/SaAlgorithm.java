@@ -8,7 +8,7 @@ import static algorithm.sa.Constants.*;
  *
  * @author Ayuan
  */
-public class SA {
+public class SaAlgorithm {
     public static void main(String[] args) {
         // 迭代中温度会发生改变，第一次迭代时温度就是T0
         Double currentTemp = INIT_TEMPERATURE;
