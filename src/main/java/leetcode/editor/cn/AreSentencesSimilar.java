@@ -6,7 +6,7 @@ import java.util.Deque;
 
 /**
  * @author Ayuan
- * @Description: TODO
+ * @Description: 1813.句子相似性 III
  * @date 2023/1/16 09:57
  */
 public class AreSentencesSimilar {
