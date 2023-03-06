@@ -15,7 +15,15 @@ public class MinimumDeletions {
 
     class Solution {
         public int minimumDeletions(String s) {
-            return 1;
+            int a = 0, b = 0;
+            for (char c : s.toCharArray()) {
+                if (c == 'b') {
+                    ++b;
+                } else {
+                    a = Math.min(a + 1, b);
+                }
+            }
+            return a;
         }
     }
 }
