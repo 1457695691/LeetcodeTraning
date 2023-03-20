@@ -1,4 +1,4 @@
-package design.Singleton;
+package design.singleton;
 
 import java.util.logging.Logger;
 

@@ -1,6 +1,4 @@
-package algorithm.sa;
-
-import java.util.Arrays;
+package algorithm;
 
 /**
  * @author Ayuan

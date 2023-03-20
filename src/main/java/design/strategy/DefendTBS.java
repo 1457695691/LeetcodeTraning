@@ -1,4 +1,4 @@
-package design.Strategy;
+package design.strategy;
 
 /**
  * @author apple

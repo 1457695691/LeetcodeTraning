@@ -1,4 +1,4 @@
-package design.Strategy;
+package design.strategy;
 
 public class DisplayA implements IDisplayBehavior{
     public void display() {
