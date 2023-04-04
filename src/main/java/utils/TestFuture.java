@@ -9,7 +9,7 @@ import java.util.concurrent.Executors;
  * @Description: 演示异步编程
  */
 @SuppressWarnings("all")
-public class yyy {
+public class TestFuture {
 
     static ExecutorService executor = Executors.newFixedThreadPool(2);
 
