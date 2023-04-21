@@ -1,6 +1,7 @@
 package algorithm.sa;
 
 import static algorithm.sa.Constants.*;
+import static java.lang.Math.*;
 
 /**
  * 模拟退火算法
@@ -37,7 +38,7 @@ public class SaAlgorithm {
                     currTempBestY = tmpY;
                 } else {
                     //根据Metropolis准则计算一个概率
-                    Double p = Math.exp(-(currTempBestY - tmpY) / currentTemp);
+                    Double p = exp(-(currTempBestY - tmpY) / currentTemp);
                     // 生成一个随机数和这个概率比较，如果该随机数小于这个概率
                     Double random = Util.random(0.0, 1.0);
                     if (random < p) {
@@ -62,7 +63,7 @@ public class SaAlgorithm {
     }
 
     public static Double targetFun(Double x) {
-        return 11 * Math.sin(x) + 7 * Math.cos(5 * x);
+        return 11 * sin(x) + 7 * cos(5 * x);
     }
 
     public static Double getNewX(Double x0, Double T, Double xLb, Double xUb) {
