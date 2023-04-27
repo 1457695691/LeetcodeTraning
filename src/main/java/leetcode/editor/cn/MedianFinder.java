@@ -1,4 +1,4 @@
-package work;
+package leetcode.editor.cn;
 import java.util.PriorityQueue;
 
 /**
