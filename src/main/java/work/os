@@ -1,0 +1,30 @@
+System.out.println(System.getProperty("java.version")); //java.version  Java 运行时环境版本
+System.out.println(System.getProperty("java.vendor"));  //java.vendor   Java 运行时环境供应商
+System.out.println(System.getProperty("java.vendor.url"));  //java.vendor.url  Java 供应商的 URL
+System.out.println(System.getProperty("java.home")); //java.home  Java 安装目录
+System.out.println(System.getProperty("java.vm.specification.version"));  //java.vm.specification.version  Java 虚拟机规范版本
+System.out.println(System.getProperty("java.vm.specification.vendor"));  //java.vm.specification.vendor   Java 虚拟机规范供应商
+System.out.println(System.getProperty("java.vm.specification.name"));  //java.vm.specification.name   Java 虚拟机规范名称
+System.out.println(System.getProperty("java.vm.version"));  //java.vm.version   Java 虚拟机实现版本
+System.out.println(System.getProperty("java.vm.vendor"));  //java.vm.vendor  虚拟机实现供应商
+System.out.println(System.getProperty("java.vm.name"));  //java.vm.name  Java 虚拟机实现名称
+System.out.println(System.getProperty("java.specification.version")); //java.specification.version  运行时环境规范版本
+System.out.println(System.getProperty("java.specification.vendor"));  //java.specification.vendor  运行时环境规范供应商
+System.out.println(System.getProperty("java.specification.name"));  //java.specification.name  Java 运行时环境规范名称
+System.out.println(System.getProperty("java.class.version"));  //java.class.version   类格式版本号
+System.out.println(System.getProperty("java.class.path"));// java.class.path   Java 类路径
+System.out.println(System.getProperty("java.library.path"));//java.library.path   加载库时搜索的路径列表
+System.out.println(System.getProperty("java.io.tmpdir"));  //java.io.tmpdir   默认的临时文件路径
+System.out.println(System.getProperty("java.compiler"));//java.compiler   要使用的 JIT 编译器的名称
+System.out.println(System.getProperty("java.ext.dirs"));//java.ext.dirs   一个或多个扩展目录的路径
+
+
+System.out.println(System.getProperty("os.name"));  //os.name   操作系统的名称
+System.out.println(System.getProperty("os.arch"));// os.arch   操作系统的架构
+System.out.println(System.getProperty("os.version"));//os.version   操作系统的版本
+System.out.println(System.getProperty("file.separator")); //file.separator   文件分隔符（在 UNIX 系统中是“/”）
+System.out.println(System.getProperty("path.separator"));//path.separator   路径分隔符（在 UNIX 系统中是“:”）
+System.out.println(System.getProperty("line.separator"));//line.separator   行分隔符（在 UNIX 系统中是“/n”）
+System.out.println(System.getProperty("user.name"));  //user.name   用户的账户名称
+System.out.println(System.getProperty("user.home"));//user.home    用户的主目录
+System.out.println(System.getProperty("user.dir"));//user.dir    用户的当前工作目录
