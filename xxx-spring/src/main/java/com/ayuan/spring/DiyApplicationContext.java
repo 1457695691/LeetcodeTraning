@@ -44,7 +44,8 @@ public class DiyApplicationContext {
                     if (fileName.endsWith(".class")) {
                         // 路径转换为包路径（com.ayuan.service）
                         String className = fileName.substring(fileName.indexOf("com"), fileName.lastIndexOf(".class"));
-                        className = className.replace("/", ".");
+                        className = className.replace("\\", "."); //windwos
+//                        className = className.replace("/", "."); //mac
                         try {
                             //Class<?> clazz = Class.forName(className);
                             Class<?> clazz = classLoader.loadClass(className);
