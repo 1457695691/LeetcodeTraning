@@ -7,6 +7,10 @@
     <groupId>org.example</groupId>
     <artifactId>workUtils</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <modules>
+        <module>xxx-spring</module>
+    </modules>
 
     <!--Spring Boot配置-->
     <parent>
