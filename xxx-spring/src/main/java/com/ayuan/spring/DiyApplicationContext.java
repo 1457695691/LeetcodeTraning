@@ -44,8 +44,8 @@ public class DiyApplicationContext {
                     if (fileName.endsWith(".class")) {
                         // 路径转换为包路径（com.ayuan.service）
                         String className = fileName.substring(fileName.indexOf("com"), fileName.lastIndexOf(".class"));
-                        className = className.replace("\\", "."); //windwos
-//                        className = className.replace("/", "."); //mac
+                        // 根据操作系统不同获取不同分隔符（windows \\）(unix /)
+                        className = className.replace(System.getProperty("file.separator"), ".");
                         try {
                             //Class<?> clazz = Class.forName(className);
                             Class<?> clazz = classLoader.loadClass(className);
@@ -101,6 +101,12 @@ public class DiyApplicationContext {
                     f.set(instance, this.getBean(f.getName()));
                 }
             }
+            //4.Aware回调
+            if (instance instanceof BeanNameAware) {
+                ((BeanNameAware) instance).setBeanName(beanName);
+            }
+            //5.初始化
+
             return instance;
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
                  NoSuchMethodException e) {

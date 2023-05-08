@@ -15,5 +15,6 @@ public class Test {
         LoginService loginService = (LoginService) diyApplicationContext.getBean("loginService");
         //执行方法
         loginService.login();
+
     }
 }
