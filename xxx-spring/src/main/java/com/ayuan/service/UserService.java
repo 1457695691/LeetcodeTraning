@@ -13,8 +13,7 @@ import com.ayuan.spring.Scope;
 @Scope("singleton")
 public class UserService {
 
-    public static void main(String[] args) {
-        UserService userService = new UserService();
-        System.out.println(userService);
+    public String getName() {
+        return "name";
     }
 }

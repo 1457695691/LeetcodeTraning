@@ -2,6 +2,7 @@ package com.ayuan.spring;
 
 import java.beans.Introspector;
 import java.io.File;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.Map;
@@ -18,9 +19,9 @@ public class DiyApplicationContext {
     private Class configClass;
 
     //beanDefinitionMap->key:beanName,value:BeanDefinition
-    private Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>();
+    private Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>(256);
     //单例池->key:beanName,value:Obj
-    private Map<String, Object> singletonObjects = new ConcurrentHashMap<>();
+    private Map<String, Object> singletonObjects = new ConcurrentHashMap<>(256);
 
     public DiyApplicationContext(Class configClass) {
         this.configClass = configClass;
@@ -88,14 +89,21 @@ public class DiyApplicationContext {
     private Object createBean(String beanName, BeanDefinition beanDefinition) {
         //1.找到当前要创建类的类型
         Class clazz = beanDefinition.getType();
-        Object instance = null;
         try {
-            instance = clazz.getConstructor().newInstance();
+            //2.根据类的构造方法反射拿到obj
+            Object instance = clazz.getConstructor().newInstance();
+            //3.依赖注入
+            for (Field f : clazz.getDeclaredFields()) {
+                if (f.isAnnotationPresent(Autowired.class)) {
+                    f.setAccessible(true);
+                    f.set(instance, this.getBean(f.getName()));
+                }
+            }
+            return instance;
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
                  NoSuchMethodException e) {
             throw new RuntimeException(e);
         }
-        return instance;
     }
 
     public Object getBean(String beanName) {
