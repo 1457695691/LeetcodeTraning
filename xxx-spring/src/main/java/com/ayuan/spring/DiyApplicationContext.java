@@ -106,6 +106,10 @@ public class DiyApplicationContext {
                 ((BeanNameAware) instance).setBeanName(beanName);
             }
             //5.初始化
+            if (instance instanceof InitializingBean) {
+                ((InitializingBean) instance).afterPropertiesSet();
+            }
+            //6.初始化后:AOP
 
             return instance;
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
