@@ -1,5 +1,6 @@
 package com.ayuan.spring;
 
+import java.beans.Introspector;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
@@ -50,6 +51,10 @@ public class DiyApplicationContext {
                                 //6.获取beanName
                                 Component componentAnnotation = clazz.getAnnotation(Component.class);
                                 String beanName = componentAnnotation.value();
+                                if (beanName == null || "".equals(beanName)) {
+                                    // 首字母小写驼峰
+                                    beanName = Introspector.decapitalize(clazz.getSimpleName());
+                                }
                                 //7.实例化beanDefinition
                                 BeanDefinition beanDefinition = new BeanDefinition();
                                 beanDefinition.setType(clazz);
@@ -73,7 +78,7 @@ public class DiyApplicationContext {
         //10.初始化所有单例Bean
         for (String beanName : beanDefinitionMap.keySet()) {
             BeanDefinition beanDefinition = beanDefinitionMap.get(beanName);
-            if (beanDefinition.getScope().equals("singleton")) {
+            if ("singleton".equals(beanDefinition.getScope())) {
                 Object obj = this.createBean(beanName, beanDefinition);
                 singletonObjects.put(beanName, obj);
             }
@@ -99,7 +104,7 @@ public class DiyApplicationContext {
             throw new NullPointerException("Bean is null");
         }
         String scope = beanDefinition.getScope();
-        if (scope.equals("singleton")) {
+        if ("singleton".equals(scope)) {
             //单例,启动时全部生成
             Object bean = singletonObjects.get(beanName);
             if (bean == null) {
