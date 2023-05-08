@@ -12,9 +12,9 @@ public class Test {
         //spring容器自定义
         DiyApplicationContext diyApplicationContext = new DiyApplicationContext(AppConfig.class);
         //获取对象
-        LoginService loginService = (LoginService) diyApplicationContext.getBean("loginService");
+        LoginServiceImpl loginServiceImpl = (LoginServiceImpl) diyApplicationContext.getBean("loginServiceImpl");
         //执行方法
-        loginService.login();
+        loginServiceImpl.login();
 
     }
 }

@@ -1,19 +1,6 @@
 package com.ayuan.service;
 
-import com.ayuan.spring.Component;
-import com.ayuan.spring.Scope;
+public interface UserService {
 
-/**
- * @author Ayuan
- * @Description: 测试service
- * @date 2023/5/8 15:01
- */
-@Component("userService")
-//@Scope("prototype")
-@Scope("singleton")
-public class UserService {
-
-    public String getName() {
-        return "name";
-    }
+    String getName();
 }

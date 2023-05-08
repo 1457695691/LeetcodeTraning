@@ -137,7 +137,7 @@ public class DiyApplicationContext {
     public Object getBean(String beanName) {
         BeanDefinition beanDefinition = beanDefinitionMap.get(beanName);
         if (beanDefinition == null) {
-            throw new NullPointerException("Bean is null");
+            throw new NullPointerException(beanName + "Bean is null");
         }
         String scope = beanDefinition.getScope();
         if ("singleton".equals(scope)) {

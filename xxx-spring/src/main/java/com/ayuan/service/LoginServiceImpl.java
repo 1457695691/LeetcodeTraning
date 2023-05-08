@@ -11,17 +11,17 @@ import com.ayuan.spring.InitializingBean;
  * @date 2023/5/8 17:59
  */
 @Component
-public class LoginService implements BeanNameAware, InitializingBean {
+public class LoginServiceImpl implements BeanNameAware, InitializingBean {
 
     @Autowired
-    private UserService userService;
+    private UserService userServiceImpl;
 
     private String beanName;
 
     private String xxx;
 
     public void login() {
-        System.out.println(userService.getName());
+        System.out.println(userServiceImpl.getName());
     }
 
     @Override
