@@ -95,6 +95,7 @@ public class DiyApplicationContext {
             //3.依赖注入
             for (Field f : clazz.getDeclaredFields()) {
                 if (f.isAnnotationPresent(Autowired.class)) {
+                    // 去除私有权限
                     f.setAccessible(true);
                     f.set(instance, this.getBean(f.getName()));
                 }
