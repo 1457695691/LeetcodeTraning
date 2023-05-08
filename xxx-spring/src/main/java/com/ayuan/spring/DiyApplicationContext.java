@@ -5,6 +5,8 @@ import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -16,12 +18,15 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class DiyApplicationContext {
 
+
     private Class configClass;
 
     //beanDefinitionMap->key:beanName,value:BeanDefinition
     private Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>(256);
     //单例池->key:beanName,value:Obj
     private Map<String, Object> singletonObjects = new ConcurrentHashMap<>(256);
+
+    private List<BeanPostProcessor> beanPostProcessorList = new ArrayList<>();
 
     public DiyApplicationContext(Class configClass) {
         this.configClass = configClass;
@@ -50,34 +55,39 @@ public class DiyApplicationContext {
                             //Class<?> clazz = Class.forName(className);
                             Class<?> clazz = classLoader.loadClass(className);
                             if (clazz.isAnnotationPresent(Component.class)) {
-                                //6.获取beanName
+                                //6.扔进beanPostProcessorList里面
+                                if (BeanPostProcessor.class.isAssignableFrom(clazz)) {
+                                    BeanPostProcessor beanPostProcessor = (BeanPostProcessor) clazz.newInstance();
+                                    beanPostProcessorList.add(beanPostProcessor);
+                                }
+                                //7.获取beanName
                                 Component componentAnnotation = clazz.getAnnotation(Component.class);
                                 String beanName = componentAnnotation.value();
                                 if (beanName == null || "".equals(beanName)) {
                                     // 首字母小写驼峰
                                     beanName = Introspector.decapitalize(clazz.getSimpleName());
                                 }
-                                //7.实例化beanDefinition
+                                //8.实例化beanDefinition
                                 BeanDefinition beanDefinition = new BeanDefinition();
                                 beanDefinition.setType(clazz);
-                                //8.判断作用域单例还是多例
+                                //9.判断作用域单例还是多例
                                 if (clazz.isAnnotationPresent(Scope.class)) {
                                     Scope scopeAnnotation = clazz.getAnnotation(Scope.class);
                                     beanDefinition.setScope(scopeAnnotation.value());
                                 } else {
                                     beanDefinition.setScope("singleton");
                                 }
-                                //9.放入beanDefinitionMap里面
+                                //10.放入beanDefinitionMap里面
                                 beanDefinitionMap.put(beanName, beanDefinition);
                             }
-                        } catch (ClassNotFoundException e) {
-                            e.printStackTrace();
+                        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+                            throw new RuntimeException(e);
                         }
                     }
                 }
             }
         }
-        //10.初始化所有单例Bean
+        //11.初始化所有单例Bean
         for (String beanName : beanDefinitionMap.keySet()) {
             BeanDefinition beanDefinition = beanDefinitionMap.get(beanName);
             if ("singleton".equals(beanDefinition.getScope())) {
@@ -105,12 +115,18 @@ public class DiyApplicationContext {
             if (instance instanceof BeanNameAware) {
                 ((BeanNameAware) instance).setBeanName(beanName);
             }
-            //5.初始化
+            //5.BeanPostProcessor机制在初始化前执行postProcessBeforeInitialization
+            for (BeanPostProcessor beanPostProcessor : beanPostProcessorList) {
+                beanPostProcessor.postProcessBeforeInitialization(beanName, instance);
+            }
+            //6.初始化
             if (instance instanceof InitializingBean) {
                 ((InitializingBean) instance).afterPropertiesSet();
             }
-            //6.初始化后:AOP
-
+            //7.初始化后: BeanPostProcessor机制实现AOP
+            for (BeanPostProcessor beanPostProcessor : beanPostProcessorList) {
+                beanPostProcessor.postProcessAfterInitialization(beanName, instance);
+            }
             return instance;
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
                  NoSuchMethodException e) {

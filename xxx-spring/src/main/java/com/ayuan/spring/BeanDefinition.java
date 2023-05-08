@@ -12,6 +12,7 @@ public class BeanDefinition {
     //作用域
     private String scope;
 
+
     public String getScope() {
         return scope;
     }
