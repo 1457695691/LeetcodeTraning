@@ -9,7 +9,12 @@ import com.ayuan.spring.Scope;
  * @date 2023/5/8 15:01
  */
 @Component("userService")
-@Scope("prototype")
+//@Scope("prototype")
+@Scope("singleton")
 public class UserService {
 
+    public static void main(String[] args) {
+        UserService userService = new UserService();
+        System.out.println(userService);
+    }
 }

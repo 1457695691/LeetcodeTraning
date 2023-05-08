@@ -1,8 +1,10 @@
 package com.ayuan.spring;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -14,7 +16,10 @@ public class DiyApplicationContext {
 
     private Class configClass;
 
+    //beanDefinitionMap->key:beanName,value:BeanDefinition
     private Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>();
+    //单例池->key:beanName,value:Obj
+    private Map<String, Object> singletonObjects = new ConcurrentHashMap<>();
 
     public DiyApplicationContext(Class configClass) {
         this.configClass = configClass;
@@ -31,15 +36,15 @@ public class DiyApplicationContext {
             File file = new File(resource.getFile());
             //4.过滤所有后缀为.class的文件
             if (file.isDirectory()) {
-                File[] files = file.listFiles();
-                for (File f : files) {
+                for (File f : Objects.requireNonNull(file.listFiles())) {
                     String fileName = f.getAbsolutePath();
                     //5.判断类是不是一个bean（是否包含component注解）
                     if (fileName.endsWith(".class")) {
                         // 路径转换为包路径（com.ayuan.service）
                         String className = fileName.substring(fileName.indexOf("com"), fileName.lastIndexOf(".class"));
-                        className = className.replace("\\", ".");
+                        className = className.replace("/", ".");
                         try {
+                            //Class<?> clazz = Class.forName(className);
                             Class<?> clazz = classLoader.loadClass(className);
                             if (clazz.isAnnotationPresent(Component.class)) {
                                 //6.获取beanName
@@ -64,12 +69,47 @@ public class DiyApplicationContext {
                     }
                 }
             }
-
+        }
+        //10.初始化所有单例Bean
+        for (String beanName : beanDefinitionMap.keySet()) {
+            BeanDefinition beanDefinition = beanDefinitionMap.get(beanName);
+            if (beanDefinition.getScope().equals("singleton")) {
+                Object obj = this.createBean(beanName, beanDefinition);
+                singletonObjects.put(beanName, obj);
+            }
         }
     }
 
+    private Object createBean(String beanName, BeanDefinition beanDefinition) {
+        //1.找到当前要创建类的类型
+        Class clazz = beanDefinition.getType();
+        Object instance = null;
+        try {
+            instance = clazz.getConstructor().newInstance();
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+                 NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
+        return instance;
+    }
+
     public Object getBean(String beanName) {
-        return null;
+        BeanDefinition beanDefinition = beanDefinitionMap.get(beanName);
+        if (beanDefinition == null) {
+            throw new NullPointerException("Bean is null");
+        }
+        String scope = beanDefinition.getScope();
+        if (scope.equals("singleton")) {
+            //单例,启动时全部生成
+            Object bean = singletonObjects.get(beanName);
+            if (bean == null) {
+                Object newBean = this.createBean(beanName, beanDefinition);
+                singletonObjects.put(beanName, newBean);
+            }
+            return bean;
+        }
+        //多例
+        return createBean(beanName, beanDefinition);
     }
 
 }
