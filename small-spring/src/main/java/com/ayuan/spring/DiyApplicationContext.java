@@ -18,14 +18,13 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class DiyApplicationContext {
 
-
     private Class configClass;
 
     //beanDefinitionMap->key:beanName,value:BeanDefinition
     private Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>(256);
     //单例池->key:beanName,value:Obj
     private Map<String, Object> singletonObjects = new ConcurrentHashMap<>(256);
-
+    //beanPostProcessor的容器
     private List<BeanPostProcessor> beanPostProcessorList = new ArrayList<>();
 
     public DiyApplicationContext(Class configClass) {
@@ -57,6 +56,7 @@ public class DiyApplicationContext {
                             if (clazz.isAnnotationPresent(Component.class)) {
                                 //6.扔进beanPostProcessorList里面
                                 if (BeanPostProcessor.class.isAssignableFrom(clazz)) {
+                                    // 判断clazz有没有实现BeanPostProcessor接口
                                     BeanPostProcessor beanPostProcessor = (BeanPostProcessor) clazz.newInstance();
                                     beanPostProcessorList.add(beanPostProcessor);
                                 }
