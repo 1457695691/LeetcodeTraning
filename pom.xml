@@ -9,7 +9,7 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
-        <module>xxx-spring</module>
+        <module>small-spring</module>
     </modules>
 
     <!--Spring Boot配置-->
