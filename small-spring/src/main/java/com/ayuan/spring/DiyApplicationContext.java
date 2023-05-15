@@ -125,7 +125,8 @@ public class DiyApplicationContext {
             }
             //7.初始化后: BeanPostProcessor机制实现AOP
             for (BeanPostProcessor beanPostProcessor : beanPostProcessorList) {
-                beanPostProcessor.postProcessAfterInitialization(beanName, instance);
+                Object o = beanPostProcessor.postProcessAfterInitialization(beanName, instance);
+                System.out.println(o);
             }
             return instance;
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException |

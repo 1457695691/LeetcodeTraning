@@ -22,13 +22,12 @@ public class DiyBeanPostProcessor implements BeanPostProcessor {
         }
         System.out.println("after loginServiceImpl");
         //jdk动态代理实现AOP
-        Object proxyInstance = Proxy.newProxyInstance(
+        return Proxy.newProxyInstance(
                 DiyBeanPostProcessor.class.getClassLoader(),
                 bean.getClass().getInterfaces(),
                 (proxy, method, args) -> {
                     System.out.println("切面AOP开始");
                     return method.invoke(bean, args);
                 });
-        return proxyInstance;
     }
 }

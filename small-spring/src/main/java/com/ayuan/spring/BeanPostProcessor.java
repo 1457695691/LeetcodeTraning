@@ -6,7 +6,6 @@ public interface BeanPostProcessor {
         return bean;
     }
 
-    ;
 
     default Object postProcessAfterInitialization(String beanName, Object bean) {
         return bean;
