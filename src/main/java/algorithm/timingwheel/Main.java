@@ -13,14 +13,14 @@ public class Main {
             TimerTask timerTask = new TimerTask(() -> {
                 countDownLatch.countDown();
                 executorCount++;
-                System.out.println(executorCount + "------------------ 开始执行");
+                System.out.println(executorCount + "------ 开始执行");
             }, i);
             systemTimer.addTask(timerTask);
-            System.out.println(i + "---------------------------加入是时间轮");
+            System.out.println(i + "------加入时间轮");
             joinCount++;
         }
         countDownLatch.await();
-        System.out.println("executorCount:-----------" + executorCount);
-        System.out.println("joinCount:-----------" + joinCount);
+        System.out.println("executorCount:------" + executorCount);
+        System.out.println("joinCount:------" + joinCount);
     }
 }
