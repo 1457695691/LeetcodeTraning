@@ -74,6 +74,8 @@ public class TimerTaskList implements Delayed {
      * 重新分配，即将列表中的任务全部处理
      */
     public synchronized void flush(Consumer<TimerTask> flush) {
+        //从尾巴开始（最先加进去的）
+        //所以逻辑就是遍历bucket里的任务，然后重新添加一遍
         TimerTask timerTask = root.next;
         while (!timerTask.equals(root)) {
             this.removeTask(timerTask);

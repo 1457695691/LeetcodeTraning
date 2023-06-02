@@ -66,6 +66,7 @@ public class TimingWheel {
         if (overflowWheel == null) {
             synchronized (this) {
                 if (overflowWheel == null) {
+                    //父时间轮的刻度是本时间轮的interval也就是全部时间范围，刻度数量保持不变
                     overflowWheel = new TimingWheel(interval, wheelSize, currentTime, delayQueue);
                 }
             }
@@ -88,8 +89,9 @@ public class TimingWheel {
             System.out.println("tickMs:" + tickMs + "------index:" + index + "------expiration:" + expiration);
             TimerTaskList timerTaskList = timerTaskLists[index];
             timerTaskList.addTask(timerTask);
+            //向下取整只表示刻度，所以在同一刻度下只会放入延迟队列一次
             if (timerTaskList.setExpiration(virtualId * tickMs)) {
-                //添加到delayQueue中
+                //添加到delayQueue中，相同刻度只会放一次
                 delayQueue.offer(timerTaskList);
             }
         } else {
@@ -104,8 +106,13 @@ public class TimingWheel {
      * 推进时间
      */
     public void advanceClock(long timestamp) {
+        //对于最小时间轮来说,因为时间往前走了一个刻度,所以timestamp至少等于currentTimestamp + tickMs,
+        //如果delayqueue.poll跳过几个没有挂载数据的刻度的话，那么timestamp 大于currentTimestamp + tickMs
+        // 但不管怎样，只要poll 出bucket后，currentTimestamp 就会和当前时间保持相对一致的，也算是一直懒处理吧
         if (timestamp >= currentTime + tickMs) {
             currentTime = timestamp - (timestamp % tickMs);
+            //尝试更新父时间轮,这个操作会只要overflowWheel不为null就会触发
+            //但父currentTimestamp 不一定会改变，因为子时间轮一次20m前进，要走10次，才能到达父时间轮tickMs
             if (overflowWheel != null) {
                 //推进上层时间轮时间
                 this.getOverflowWheel().advanceClock(timestamp);
