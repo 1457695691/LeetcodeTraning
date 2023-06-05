@@ -1,4 +1,4 @@
-package unsafe;
+package test.unsafe;
 
 /**
  * @author Ayuan

@@ -1,4 +1,4 @@
-package parser;
+package test.parser;
 
 import com.manticore.jsqlformatter.JSQLFormatter;
 import net.sf.jsqlparser.expression.LongValue;

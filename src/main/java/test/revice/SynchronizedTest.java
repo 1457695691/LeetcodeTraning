@@ -1,4 +1,4 @@
-package code.revice;
+package test.revice;
 
 import java.util.concurrent.TimeUnit;
 

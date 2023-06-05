@@ -1,4 +1,4 @@
-package algorithm;
+package algorithm.sku;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
