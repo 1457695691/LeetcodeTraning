@@ -9,10 +9,10 @@ import java.util.List;
  * @date 2023/6/15 10:43
  */
 public class CanMakePaliQueries {
+
     /**
      * 前缀和+异或
      */
-
     class Solution {
         public List<Boolean> canMakePaliQueries(String s, int[][] queries) {
             int n = s.length();
