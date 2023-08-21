@@ -87,7 +87,7 @@ public class Skiplist {
 }
 
 
-class test {
+class c {
     public static void main(String[] args) {
         Skiplist skiplist = new Skiplist();
         skiplist.add(1);
