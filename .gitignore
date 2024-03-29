@@ -1,9 +1,2 @@
-/DP单模通用驱动和文件配置/
-#/src/main/java/design/template/
-#/src/main/java/utils/
-#/src/main/java/work/
-#/src/main/java/common/
-#/src/main/java/design/
-#/src/main/java/exception/
-#/src/main/java/http/
 /.idea
+/*.iml

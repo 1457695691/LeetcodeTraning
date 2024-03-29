@@ -1,6 +1,5 @@
 package utils;
 
-import com.sun.deploy.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,7 +15,7 @@ public class ExalUtils {
 //        list1.add("2");
 //        list1.add("3");
         String ss = String.join(",", list1);
-        System.out.println(StringUtils.join(list1, ""));
+//        System.out.println(StringUtils.join(list1, ""));
         System.out.println(ss);
         System.out.println("+++++++++++++++++++++++++++++++++");
         System.out.println("字符串转List");
